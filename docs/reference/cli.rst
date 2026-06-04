@@ -31,6 +31,30 @@ By default build will build the package in an isolated environment, but this beh
 specified in your ``pyproject.toml``, runs the build, and then cleans up the environment. This ensures reproducible
 builds regardless of what packages are installed in your development environment.
 
+****************
+ Verbose Output
+****************
+
+Repeating ``-v`` raises the verbosity level. Each level adds to the previous one:
+
+- ``-v`` streams the output of the environment-creation and dependency-installation subprocesses.
+- ``-vv`` additionally prints the resolved version of every installed build dependency, one ``name==version`` per line,
+  and passes ``-v`` through to the installer.
+
+build reads the resolved versions from the isolated environment's installed metadata, so they reflect what was installed
+rather than the specifiers in ``pyproject.toml``:
+
+.. code-block:: console
+
+    $ python -m build --wheel -vv
+    ...
+    * Building wheel...
+      setuptools==80.9.0
+      wheel==0.45.1
+
+build reports this for isolated builds only; with ``--no-isolation`` build installs nothing, so inspect the active
+interpreter with your installer instead (for example ``pip list``).
+
 ************************
  Alternative CLI Script
 ************************
